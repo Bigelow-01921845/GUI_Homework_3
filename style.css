@@ -1,0 +1,21 @@
+
+table th {
+  background-color: black;
+  color: white;
+  border: 1px solid white; /* White border */
+}
+
+/* Style for the first column cells */
+table th:first-child,
+table td:first-child {
+  background-color: black;
+  color: white;
+  border: 1px solid white; /* White border */
+}
+
+/* Style for the rest of the table cells */
+table td {
+  background-color: white;
+  color: black;
+  border: 1px solid black; /* Black border */
+}

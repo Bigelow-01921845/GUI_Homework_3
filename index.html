@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiplication Table Generator</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container-fluid">
+    <h1 class="text-center my-4">Please enter the table ranges</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form action="/table-ranges" method="post">
+          <div class="form-group">
+            <label for="start-horizontal">Minimum Column Value</label>
+            <input id="start-horizontal" name="min-column-value" type="number" min="-50" max="50" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="end-horizontal">Maximum Column Value</label>
+            <input id="end-horizontal" name="max-column-value" type="number" min="-50" max="50" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="start-vertical">Minimum Row Value</label>
+            <input id="start-vertical" name="min-row-value" type="number" min="-50" max="50" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="end-vertical">Maximum Row Value</label>
+            <input id="end-vertical" name="max-row-value" type="number" min="-50" max="50" class="form-control">
+          </div>
+          <button type="button" class="btn btn-primary btn-block" onclick="generateTable()">Regenerate Table</button>
+        </form>
+      </div>
+    </div>
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-10">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped">
+            <thead></thead>
+            <tbody id="generated-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+  <script>
+    function generateTable() {
+      const minColumnValue = parseInt(document.getElementById("start-horizontal").value);
+      const maxColumnValue = parseInt(document.getElementById("end-horizontal").value);
+      const minRowValue = parseInt(document.getElementById("start-vertical").value);
+      const maxRowValue = parseInt(document.getElementById("end-vertical").value);
+
+      if (isNaN(minColumnValue) || isNaN(maxColumnValue) || isNaN(minRowValue) || isNaN(maxRowValue) ||
+        minColumnValue < -50 || maxColumnValue > 50 || minRowValue < -50 || maxRowValue > 50) {
+        alert("Please enter valid numbers within the range of -50 to 50.");
+        return;
+      }
+
+      const table = generateMultiplicationTable(minColumnValue, minRowValue, maxColumnValue, maxRowValue);
+      const tbody = document.getElementById("generated-table-body");
+      tbody.innerHTML = "";
+
+
+      tbody.appendChild(table.tBody);
+    }
+
+    function generateMultiplicationTable(minColumn, minRow, maxColumn, maxRow) {
+      const table = document.createElement("table");
+      const tBody = document.createElement("tbody");
+      const headerRow = document.createElement("tr");
+      headerRow.innerHTML = "<th></th>";
+
+      for (let col = minColumn; col <= maxColumn; col++) {
+        const th = document.createElement("th");
+        th.textContent = col;
+        headerRow.appendChild(th);
+      }
+      tBody.appendChild(headerRow);
+
+      for (let row = minRow; row <= maxRow; row++) {
+        const tr = document.createElement("tr");
+        const th = document.createElement("th");
+        th.textContent = row;
+        tr.appendChild(th);
+        for (let col = minColumn; col <= maxColumn; col++) {
+          const td = document.createElement("td");
+          const result = row * col;
+          if (result.toString().length > 10) {
+            td.textContent = "Large number";
+          } else {
+            td.textContent = result;
+          }
+          tr.appendChild(td);
+        }
+        tBody.appendChild(tr);
+      }
+      table.appendChild(tBody);
+
+      return { tBody };
+    }
+  </script>
+</body>
+
+</html>
